@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+#include <string.h>
+
+#define MaxLength  500
+
+int WaitCommand(void);
+void Students(void);
+void Five(void);
+void Three(void);
+void Two(void);
+
+int main(int argc, char * argv[])
+{
+	setlocale(LC_CTYPE, "ru");
+
+
+
+	// Бесконечный цикл ожидания команды
+	for (int Command;;)
+	{
+		// Получаем команду
+		Command = WaitCommand();
+		// Реагируем на команду
+		switch (Command)
+		{
+		case  0: exit(0); break;
+		case  1: Students(); break;
+		case  2: Five(); break;
+		case  3: Three(); break;
+		case  4: Two(); break;
+		}
+	}
+}
