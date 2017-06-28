@@ -1,0 +1,138 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+#include <string.h>
+
+#define MaxLength  500
+int WaitCommand(void);
+void Students(void);
+void Five(void);
+void Three(void);
+void Two(void);
+
+int main(int argc, char * argv[])
+{
+	setlocale(LC_CTYPE, "ru");
+
+
+
+	// Бесконечный цикл ожидания команды
+	for (int Command;;)
+	{
+		// Получаем команду
+		Command = WaitCommand();
+		// Реагируем на команду
+		switch (Command)
+		{
+		case  0: exit(0); break;
+		case  1: Students(); break;
+		case  2: Five(); break;
+		case  3: Three(); break;
+		case  4: Two(); break;
+		}
+	}
+}
+
+int WaitCommand(void)
+{
+
+	printf("Возможные действия:\n");
+	int i = 0;
+	printf(" 1. Список cтудентов\n");
+	printf(" 2. Список cтудентов, которые сдаль все экзамены только на пять\n");
+	printf(" 3. Список cтудентов, которые имеют хотя-бы одну тройку по экзаменам\n");
+	printf(" 4. Список cтудентов, у которых есть двойки \n");
+	printf(" 0. Выйти из программы\n");
+	printf("\n");
+	int Choice;
+	do
+	{
+		Choice = -1;
+		printf("Пожалуйста, сделайте свой выбор: ");
+		scanf_s("%d", &Choice);
+	} while (Choice < 0 || Choice > 4);
+	getchar();
+	printf("\n\n");
+	return Choice;
+}
+
+void Students(void)
+{
+	FILE * CsvFile;
+	CsvFile = fopen("База_студентов.txt", "r");
+	if (CsvFile == NULL)
+	{
+		printf("Ошибка открытия файла!\n");
+	}
+	char
+		String[MaxLength],
+		Field[6][MaxLength],
+		Sep[10] = ";",
+		*Substr,
+		*Pos;
+	int FieldNum,
+		RecNum = 0,
+		FindNum = 0;
+	bool Flag;
+	while (!feof(CsvFile))
+	{
+		if (fgets(String, MaxLength, CsvFile))
+		{
+			RecNum++;
+			FieldNum = 0;
+			Substr = String;
+			for (;;)
+			{
+				Pos = strchr(Substr, ';');
+				if (!Pos) break;
+				*Pos = '\0';
+				strcpy(Field[FieldNum++], Substr);
+				Substr = Pos + 1;
+			}
+			printf("%s\n", Field[0]);
+		}
+	}
+	fclose(CsvFile);
+}
+
+void Five(void)
+{
+	FILE * CsvFile;
+	CsvFile = fopen("База_студентов.txt", "r");
+	int people = 0;
+	if (CsvFile == NULL)
+	{
+		printf("Ошибка открытия файла!\n");
+	}
+	char
+		String[MaxLength],
+		Field[6][MaxLength],
+		Sep[10] = ";",
+		*Substr,
+		*Pos;
+	int FieldNum,
+		RecNum = 0,
+		FindNum = 0;
+	bool Flag;
+	while (!feof(CsvFile))
+	{
+		if (fgets(String, MaxLength, CsvFile))
+		{
+			RecNum++;
+			FieldNum = 0;
+			Substr = String;
+			for (;;)
+			{
+				Pos = strchr(Substr, ';');
+				if (!Pos) break;
+				*Pos = '\0';
+				strcpy(Field[FieldNum++], Substr);
+				Substr = Pos + 1;
+			}
+			if (atoi(Field[1]) == 5 && atoi(Field[2]) == 5 && atoi(Field[3]) == 5 && atoi(Field[4]) == 5 && atoi(Field[5]) == 5)
+				printf("%s\n", Field[0]);
+		}
+	}
+	fclose(CsvFile);
+}
+
